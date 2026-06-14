@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💕 Anh muốn hỏi em...</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Raleway',sans-serif;background:#0a0015;overflow:hidden;height:100vh;width:100vw}
+#uni{width:100%;height:100vh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(80px);animation:orbP ease-in-out infinite}
+@keyframes orbP{0%,100%{transform:scale(1);opacity:.12}50%{transform:scale(1.3);opacity:.22}}
+.screen{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;opacity:0;pointer-events:none;transition:opacity .8s;text-align:center;z-index:10;color:#fff}
+.screen.active{opacity:1;pointer-events:all}
+.pf{font-family:'Playfair Display',serif}
+/* S1 */
+#s1 .tw{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1.3rem,4vw,2rem);color:#f0c0e0;letter-spacing:2px;min-height:60px}
+#s1 .hint{font-size:.75rem;color:rgba(200,150,220,.5);margin-top:2.5rem;letter-spacing:4px;text-transform:uppercase;animation:p2 2s infinite;opacity:0;transition:opacity .5s}
+@keyframes p2{0%,100%{opacity:.3}50%{opacity:1}}
+/* S2 */
+#s2 .ttl{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,3vw,1.7rem);color:#f5d0e8;margin-bottom:1.8rem;line-height:1.5}
+#heart{animation:hb 1.2s ease-in-out infinite;filter:drop-shadow(0 0 24px rgba(255,80,150,.8));margin:1rem 0}
+@keyframes hb{0%,100%{transform:scale(1)}15%{transform:scale(1.16)}30%{transform:scale(1)}45%{transform:scale(1.09)}60%{transform:scale(1)}}
+/* S3 */
+#s3 .ttl{font-family:'Playfair Display',serif;font-size:clamp(1rem,3vw,1.4rem);color:#f5d0e8;margin-bottom:1.5rem}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:480px;width:100%}
+.rc{background:rgba(255,255,255,.05);border:1px solid rgba(255,120,180,.2);border-radius:16px;padding:14px 16px;text-align:left;opacity:0;transform:translateY(20px);transition:all .5s;backdrop-filter:blur(10px)}
+.rc.show{opacity:1;transform:translateY(0)}
+.rc .ico{font-size:1.4rem;margin-bottom:4px}
+.rc .txt{font-size:.77rem;color:rgba(240,200,230,.9);line-height:1.6;font-weight:300}
+/* S4 */
+#s4 .bq{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,5vw,3rem);background:linear-gradient(135deg,#ff80c0,#c080ff,#80c0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:2.5rem;line-height:1.4;animation:sh 3s ease-in-out infinite}
+@keyframes sh{0%,100%{filter:brightness(1)}50%{filter:brightness(1.35)}}
+.bgrp{display:flex;gap:16px;align-items:center;flex-wrap:wrap;justify-content:center}
+.byes{background:linear-gradient(135deg,#ff4d9e,#c43bff);border:none;color:#fff;font-family:'Raleway',sans-serif;font-size:1.1rem;font-weight:600;padding:14px 44px;border-radius:50px;cursor:pointer;letter-spacing:1px;box-shadow:0 0 30px rgba(255,80,180,.5);transition:all .3s;position:relative;overflow:hidden}
+.byes:hover{transform:scale(1.08);box-shadow:0 0 55px rgba(255,80,180,.8)}
+.bno{background:transparent;border:1px solid rgba(200,150,220,.35);color:rgba(200,150,220,.7);font-family:'Raleway',sans-serif;font-size:.9rem;padding:10px 28px;border-radius:50px;cursor:pointer;letter-spacing:1px;transition:all .15s;position:fixed;z-index:99}
+/* S5 */
+#s5 .ct{font-family:'Playfair Display',serif;font-size:clamp(2rem,6vw,3.5rem);background:linear-gradient(135deg,#ffb3d9,#d4a0ff,#a0d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:fl 3s ease-in-out infinite;margin-bottom:.8rem}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+#s5 .sc{font-size:.95rem;color:rgba(240,210,255,.8);font-weight:300;letter-spacing:2px;margin-bottom:1.5rem}
+#s5 .quote{font-family:'Playfair Display',serif;font-style:italic;font-size:.9rem;color:rgba(220,180,255,.7);max-width:280px;line-height:1.9;margin-bottom:1.5rem}
+#s5 .emr{font-size:2.2rem;letter-spacing:10px;animation:be 1s ease-in-out infinite}
+@keyframes be{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.dots{position:absolute;bottom:24px;display:flex;gap:8px;z-index:20}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s}
+.dot.active{background:#ff80c0;box-shadow:0 0 8px rgba(255,128,192,.8);width:20px;border-radius:3px}
+.particle{position:absolute;border-radius:50%;pointer-events:none;animation:fu linear infinite}
+@keyframes fu{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:1}90%{opacity:.4}100%{transform:translateY(-100vh) rotate(720deg);opacity:0}}
+.cf{position:absolute;pointer-events:none;animation:cff linear forwards}
+@keyframes cff{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+.blink{animation:bl 1s step-end infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:0}}
+.sub2{font-size:.75rem;color:rgba(240,180,220,.4);letter-spacing:3px;text-transform:uppercase;margin-top:1.8rem}
+</style>
+</head>
+<body>
+<div id="uni">
+  <canvas id="cv"></canvas>
+  <div class="orb" style="width:500px;height:500px;background:#c040ff;top:-150px;left:-150px;animation-duration:7s"></div>
+  <div class="orb" style="width:400px;height:400px;background:#ff4096;top:55%;right:-100px;animation-duration:9s"></div>
+  <div class="orb" style="width:350px;height:350px;background:#4060ff;bottom:-80px;left:25%;animation-duration:6s"></div>
+
+  <!-- S1 -->
+  <div class="screen active" id="s1">
+    <div style="font-size:2.5rem;margin-bottom:1.2rem;opacity:.8">✨</div>
+    <div class="tw" id="tw"><span class="blink">|</span></div>
+    <div class="hint" id="hint">Chạm để tiếp tục →</div>
+  </div>
+
+  <!-- S2 -->
+  <div class="screen" id="s2">
+    <div class="ttl">Mỗi ngày có em...<br>trái tim anh đập khác đi</div>
+    <svg id="heart" width="150" height="140" viewBox="0 0 140 130">
+      <defs>
+        <radialGradient id="hg" cx="50%" cy="40%" r="60%">
+          <stop offset="0%" stop-color="#ff80c0"/>
+          <stop offset="100%" stop-color="#c020a0"/>
+        </radialGradient>
+        <radialGradient id="hg2" cx="50%" cy="40%" r="60%">
+          <stop offset="0%" stop-color="#ff60a0" stop-opacity=".35"/>
+          <stop offset="100%" stop-color="#800060" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <path d="M70 115 C70 115 8 73 8 38 C8 18 24 8 40 8 C52 8 62 16 70 27 C78 16 88 8 100 8 C116 8 132 18 132 38 C132 73 70 115 70 115Z" fill="url(#hg)"/>
+      <path d="M70 115 C70 115 8 73 8 38 C8 18 24 8 40 8 C52 8 62 16 70 27 C78 16 88 8 100 8 C116 8 132 18 132 38 C132 73 70 115 70 115Z" fill="url(#hg2)" transform="scale(1.35) translate(-14,-9)"/>
+      <ellipse cx="50" cy="36" rx="13" ry="8" fill="rgba(255,255,255,.22)" transform="rotate(-32,50,36)"/>
+    </svg>
+    <div class="sub2">Chạm để tiếp tục</div>
+  </div>
+
+  <!-- S3 -->
+  <div class="screen" id="s3">
+    <div class="ttl pf">Tại sao em là người đặc biệt...</div>
+    <div class="rgrid">
+      <div class="rc"><div class="ico">💫</div><div class="txt">Nụ cười của em làm anh quên mất mọi thứ xung quanh</div></div>
+      <div class="rc"><div class="ico">🌙</div><div class="txt">Bên em, anh cảm thấy bình yên hơn bất cứ nơi nào</div></div>
+      <div class="rc"><div class="ico">✨</div><div class="txt">Em sáng lên trong từng khoảnh khắc nhỏ nhất</div></div>
+      <div class="rc"><div class="ico">💜</div><div class="txt">Anh muốn được viết những câu chuyện cùng em</div></div>
+    </div>
+    <div class="sub2">Chạm để tiếp tục</div>
+  </div>
+
+  <!-- S4 -->
+  <div class="screen" id="s4">
+    <div style="font-size:1.5rem;margin-bottom:1.2rem;opacity:.8">💌</div>
+    <div class="bq" id="bq"></div>
+    <div class="bgrp">
+      <button class="byes" id="byes">Có, em muốn 💕</button>
+      <button class="bno" id="bno">Không...</button>
+    </div>
+  </div>
+
+  <!-- S5 -->
+  <div class="screen" id="s5">
+    <div style="font-size:3rem;margin-bottom:.8rem;animation:fl 2s ease-in-out infinite">💑</div>
+    <div class="ct">Yay! Hạnh phúc rồi!</div>
+    <div class="sc">Từ hôm nay, mình là của nhau 🌸</div>
+    <div class="quote">"Anh sẽ luôn ở đây,<br>mãi mãi bên em..."</div>
+    <div class="emr">🌹 💜 🌙</div>
+  </div>
+
+  <div class="dots">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+</div>
+
+<script>
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+let stars=[];
+function initC(){
+  cv.width=window.innerWidth;cv.height=window.innerHeight;
+  stars=[];
+  for(let i=0;i<200;i++) stars.push({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*1.5+.3,sp:Math.random()*.3+.1,tw:Math.random()*Math.PI*2,tsp:Math.random()*.03+.01});
+}
+function drawS(){
+  ctx.clearRect(0,0,cv.width,cv.height);
+  stars.forEach(s=>{
+    s.tw+=s.tsp;
+    const a=.35+Math.sin(s.tw)*.5,h=250+Math.sin(s.tw*.3)*40;
+    ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle=`hsla(${h},60%,92%,${a})`;ctx.fill();
+    s.y-=s.sp;if(s.y<0){s.y=cv.height;s.x=Math.random()*cv.width;}
+  });
+  requestAnimationFrame(drawS);
+}
+initC();drawS();
+window.addEventListener('resize',initC);
+
+setInterval(()=>{
+  const p=document.createElement('div');p.className='particle';
+  const sz=Math.random()*4+2;
+  const cols=['rgba(255,100,180,.7)','rgba(180,100,255,.7)','rgba(255,200,100,.5)','rgba(100,180,255,.5)'];
+  p.style.cssText=`width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};left:${Math.random()*100}%;bottom:-10px;animation-duration:${Math.random()*8+5}s;animation-delay:${Math.random()*4}s;`;
+  document.getElementById('uni').appendChild(p);
+  setTimeout(()=>p.remove(),14000);
+},700);
+
+// Typewriter
+const txts=["Có một điều... anh muốn nói với em.","Một điều rất quan trọng...","Một điều anh đã giữ lâu trong tim."];
+let ti=0,ci=0,done=false;
+const tw=document.getElementById('tw'),hint=document.getElementById('hint');
+function type(){
+  if(ti>=txts.length){done=true;hint.style.opacity='1';return;}
+  const t=txts[ti];
+  if(ci<=t.length){
+    tw.innerHTML=t.slice(0,ci)+'<span class="blink">|</span>';
+    ci++;setTimeout(type,65);
+  } else {
+    setTimeout(()=>{ci=0;ti++;tw.innerHTML='<span class="blink">|</span>';
+    if(ti<txts.length)setTimeout(type,400);else{done=true;hint.style.opacity='1';}},1100);
+  }
+}
+setTimeout(type,800);
+
+function typeBQ(){
+  const q="Em có muốn làm\nbạn gái anh không?";
+  const el=document.getElementById('bq');let i=0;
+  function t(){if(i<=q.length){el.textContent=q.slice(0,i);i++;setTimeout(t,75);}}
+  t();
+}
+
+function animR(){
+  document.querySelectorAll('.rc').forEach((c,i)=>setTimeout(()=>c.classList.add('show'),i*220+300));
+}
+
+let cur=0;
+const sids=['s1','s2','s3','s4','s5'];
+function goTo(n){
+  if(n===cur)return;
+  const o=document.getElementById(sids[cur]),nw=document.getElementById(sids[n]);
+  o.style.opacity='0';o.style.pointerEvents='none';
+  setTimeout(()=>{
+    o.classList.remove('active');nw.classList.add('active');
+    nw.style.opacity='1';nw.style.pointerEvents='all';
+    cur=n;updateDots();
+    if(n===2)animR();
+    if(n===3){setTimeout(typeBQ,400);setTimeout(posNo,600);}
+    if(n===4)celebrate();
+  },350);
+}
+function updateDots(){
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===cur&&cur<4));
+}
+
+document.getElementById('uni').addEventListener('click',e=>{
+  if(e.target.closest('.byes')||e.target.closest('.bno'))return;
+  if(cur===0&&done)goTo(1);
+  else if(cur===1)goTo(2);
+  else if(cur===2)goTo(3);
+});
+
+const bno=document.getElementById('bno');
+let nx=null,ny=null;
+function posNo(){
+  const u=document.getElementById('uni');
+  const W=u.clientWidth,H=u.clientHeight;
+  if(nx===null){nx=W/2+80;ny=H/2+60;}
+  bno.style.left=nx+'px';bno.style.top=ny+'px';
+}
+function runAway(){
+  const W=window.innerWidth,H=window.innerHeight;
+  const m=90;
+  nx=m+Math.random()*(W-m*2);
+  ny=m+Math.random()*(H-m*2);
+  bno.style.left=nx+'px';bno.style.top=ny+'px';
+}
+bno.addEventListener('mouseenter',runAway);
+bno.addEventListener('touchstart',e=>{e.preventDefault();runAway();});
+document.getElementById('byes').addEventListener('click',()=>goTo(4));
+
+function celebrate(){
+  const cols=['#ff80c0','#d080ff','#80c0ff','#ffd080','#ff6060','#80ffb0'];
+  for(let i=0;i<100;i++){
+    setTimeout(()=>{
+      const c=document.createElement('div');c.className='cf';
+      c.style.cssText=`left:${Math.random()*100}%;top:-10px;background:${cols[Math.floor(Math.random()*cols.length)]};width:${Math.random()*8+4}px;height:${Math.random()*8+4}px;border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${Math.random()*2+1.5}s;animation-delay:${Math.random()*1.5}s;`;
+      document.getElementById('uni').appendChild(c);
+      setTimeout(()=>c.remove(),4000);
+    },i*40);
+  }
+}
+</script>
+</body>
+</html>
